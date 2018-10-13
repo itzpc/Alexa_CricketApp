@@ -1,4 +1,4 @@
-# Alexa_CricketApp
+# Alexa_FavNumApp
 Amazon Alexa Cricket App
 
 1. Created Skill in Amazon Developer
