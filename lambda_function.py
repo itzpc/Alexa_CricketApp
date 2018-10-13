@@ -29,6 +29,33 @@ def statement(title, body):
     speechlet['shouldEndSession'] = True
     return build_response(speechlet)
 
+#Custom Intent
+def Fav_Num_Intent(event,content):
+    favNum= "My Fav number is 7"
+    return statement("fav_Num_intent_card", favNum)
+
+#Routing
+def intent_router(event, context):
+    intent = event['request']['intent']['name']
+
+    # Custom Intents
+
+    if intent == "FavNumIntent":
+        return Fav_Num_Intent(event, context)
+
+
+
+    # Required Intents
+
+    if intent == "AMAZON.CancelIntent":
+        return cancel_intent()
+
+    if intent == "AMAZON.HelpIntent":
+        return help_intent()
+
+    if intent == "AMAZON.StopIntent":
+        return stop_intent()
+
 # On Launch
 def on_launch(event, context):
     return statement("title", "Hello World")
@@ -37,3 +64,5 @@ def on_launch(event, context):
 def lambda_handler(event, context):
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event, context)
+    elif event['request']['type'] == "IntentRequest":
+        return intent_router(event, context)
