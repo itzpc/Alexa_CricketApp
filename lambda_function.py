@@ -28,6 +28,13 @@ def statement(title, body):
     speechlet['card'] = build_SimpleCard(title, body)
     speechlet['shouldEndSession'] = True
     return build_response(speechlet)
+def conversation(title, body, session_attributes):
+    speechlet = {}
+    speechlet['outputSpeech'] = build_PlainSpeech(body)
+    speechlet['card'] = build_SimpleCard(title, body)
+    speechlet['shouldEndSession'] = False
+    return build_response(speechlet, session_attributes=session_attributes)
+
 
 #Custom Intent
 def Fav_Num_Intent(event,content):
@@ -43,6 +50,34 @@ def scorePhrase_intent(event,content):
     return statement("NumSlot",Phrase)
 
 
+def scoreNum_intent(event,content):
+    slot=event['request']['intent']['slots']
+    number="You Have Scored "+slot['score']['value']+"!"
+    return statement("NumSlot",number)
+
+def scorePhrase_intent(event,content):
+    slot=event['request']['intent']['slots']
+    Phrase="That was a "+slot['shotDescription']['value']+" shot !"
+    return statement("NumSlot",Phrase)
+
+def Session_Intent(event,content):
+    """
+    in order to maintain the session , return the session object in every response
+    """
+    if 'attributes' in event['session']:
+        session_attributes=event['session']['attributes']
+        if 'counter' in session_attributes:
+            session_attributes['counter']+=1
+        else:
+            session_attributes['counter']=1
+    else:
+        event['session']['attributes']={}
+        session_attributes=event['session']['attributes']
+        if 'counter' not in session_attributes:
+            session_attributes['counter']=1
+    return conversation("SessionIntent",session_attributes['counter'],session_attributes)
+
+
 #Routing
 def intent_router(event, context):
     intent = event['request']['intent']['name']
@@ -56,6 +91,9 @@ def intent_router(event, context):
         return scoreNum_intent(event, context)
     if intent == "scorePhrase":
         return scorePhrase_intent(event,context)
+
+    if intent == "SessionIntent":
+        return Session_Intent(event,context)
 
     # Required Intents
 
