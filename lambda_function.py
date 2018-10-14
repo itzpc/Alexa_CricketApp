@@ -40,6 +40,15 @@ def conversation(title, body, session_attributes):
 def Fav_Num_Intent(event,content):
     favNum= "My Fav number is 7"
     return statement("fav_Num_intent_card", favNum)
+def scoreNum_intent(event,content):
+    slot=event['request']['intent']['slots']
+    number="You Have Scored "+slot['score']['value']+"!"
+    return statement("NumSlot",number)
+def scorePhrase_intent(event,content):
+    slot=event['request']['intent']['slots']
+    Phrase="That was a "+slot['shotDescription']['value']+" shot !"
+    return statement("NumSlot",Phrase)
+
 
 def scoreNum_intent(event,content):
     slot=event['request']['intent']['slots']
@@ -82,8 +91,10 @@ def intent_router(event, context):
         return scoreNum_intent(event, context)
     if intent == "scorePhrase":
         return scorePhrase_intent(event,context)
+
     if intent == "SessionIntent":
         return Session_Intent(event,context)
+
     # Required Intents
 
     if intent == "AMAZON.CancelIntent":
