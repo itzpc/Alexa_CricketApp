@@ -33,18 +33,10 @@ def statement(title, body):
 def Fav_Num_Intent(event,content):
     favNum= "My Fav number is 7"
     return statement("fav_Num_intent_card", favNum)
-
-# In-built Required intent
-def cancel_intent():
-    return statement("CancelIntent", "You want to cancel")	#don't use CancelIntent as title it causes code reference error during certification
-
-
-def help_intent():
-    return statement("CancelIntent", "You want help")		#same here don't use CancelIntent
-
-
-def stop_intent():
-    return statement("StopIntent", "You want to stop")		#here also don't use StopIntent
+def scoreNum_intent(event,content):
+    slot=event['request']['intent']['slots']
+    number="You Have Scored "+slot['score']['value']+"!"
+    return statement("NumSlot",number)
 
 #Routing
 def intent_router(event, context):
@@ -55,7 +47,8 @@ def intent_router(event, context):
     if intent == "FavNumIntent":
         return Fav_Num_Intent(event, context)
 
-
+    if intent== "scoreNum":
+        return scoreNum_intent(event, context)
 
     # Required Intents
 
