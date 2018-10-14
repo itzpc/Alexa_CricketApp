@@ -33,6 +33,15 @@ def statement(title, body):
 def Fav_Num_Intent(event,content):
     favNum= "My Fav number is 7"
     return statement("fav_Num_intent_card", favNum)
+def scoreNum_intent(event,content):
+    slot=event['request']['intent']['slots']
+    number="You Have Scored "+slot['score']['value']+"!"
+    return statement("NumSlot",number)
+def scorePhrase_intent(event,content):
+    slot=event['request']['intent']['slots']
+    Phrase="That was a "+slot['shotDescription']['value']+" shot !"
+    return statement("NumSlot",Phrase)
+
 
 #Routing
 def intent_router(event, context):
@@ -43,7 +52,10 @@ def intent_router(event, context):
     if intent == "FavNumIntent":
         return Fav_Num_Intent(event, context)
 
-
+    if intent== "scoreNum":
+        return scoreNum_intent(event, context)
+    if intent == "scorePhrase":
+        return scorePhrase_intent(event,context)
 
     # Required Intents
 
