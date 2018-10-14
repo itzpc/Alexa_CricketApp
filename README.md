@@ -36,6 +36,7 @@ Calling a sample intent
 Digit Phrase
 
 > cricket  score  {score}
+
 > cricket  {score}  scored
 
 Short Phrase
